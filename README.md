@@ -34,13 +34,16 @@ The repository is structured by days, with each day containing a Rust file (main
 ```
 aoc24-rs/
 │
-├── day01/
-│   ├── input.txt
-│   └── main.rs
+├── day_01/
+|   ├── src
+|   |   └── main.rs
+│   └── input.txt
+│   
 │
-├── day02/
-│   ├── input.txt
-│   └── main.rs
+├── day_02/
+|   ├── src
+|   |   └── main.rs
+│   └── input.txt
 │
 └── ...
 ```
