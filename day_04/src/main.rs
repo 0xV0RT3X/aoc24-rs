@@ -1,7 +1,7 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::time::Instant;
 
-fn process_card(card: &str) -> u32 {
+fn process_card(card: &str, card_idx: usize, scratchcards: &mut HashMap<usize, u32>) -> u32 {
     let mut parts = card.split('|');
 
     let left = parts.next().unwrap();
@@ -25,6 +25,12 @@ fn process_card(card: &str) -> u32 {
         }
     }
 
+    for j in 0..winning_number_count {
+        scratchcards.entry(card_idx + 1 + j).or_insert(1);
+        let a = scratchcards.get(&(card_idx + 1 + j)).unwrap();
+        scratchcards.insert(card_idx + 1 + j, a + scratchcards.get(&card_idx).unwrap());
+    }
+
     if winning_number_count > 0 {
         1 << (winning_number_count - 1)
     } else {
@@ -33,15 +39,16 @@ fn process_card(card: &str) -> u32 {
 }
 
 fn main() {
-    let start = Instant::now();
     let cards = include_str!("../input.txt").lines();
 
     let mut total_points = 0;
-    for card in cards {
-        total_points += process_card(card);
+    let mut scratchcards: HashMap<usize, u32> = HashMap::new();
+    for (card_idx, card) in cards.enumerate() {
+        scratchcards.entry(card_idx).or_insert(1);
+
+        total_points += process_card(card, card_idx, &mut scratchcards);
     }
 
-    println!("{}", total_points);
-
-    println!("{:?}", Instant::now() - start);
+    println!("Part 1: {}", total_points);
+    println!("Part 2: {}", scratchcards.values().sum::<u32>());
 }
