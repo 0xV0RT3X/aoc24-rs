@@ -74,31 +74,20 @@ fn main() {
 
     let mut lines = include_str!("../input.txt").lines();
 
-    let seeds = get_seeds(lines.next().unwrap());
-    let mut seed_chunks: Vec<_> = seeds.chunks(2).collect();
-    seed_chunks.sort_by(|a, b| a[0].cmp(&b[0]));
+    let _seeds = get_seeds(lines.next().unwrap());
 
     let ranges = get_map_ranges(&lines.collect());
 
-    //let mut seed_2_loc = HashMap::new();
-
-    // Part 1
-    // for seed_chunk in seed_chunks {
-    //     let start_seed = seed_chunk[0];
-    //     let end_seed = seed_chunk[1] + start_seed;
-    //
-    //     for seed in (start_seed..end_seed).step_by(10) {
-    //         seed_2_loc.insert(seed, process_seed(seed, &ranges));
-    //     }
-    // }
-
-    // Part 2
     let seed_2_loc: HashMap<_, _> = (3_119_409_201..3_362_633_271)
         .into_par_iter()
         .map(|seed| (seed, process_seed(seed, &ranges)))
         .collect();
 
-    println!("{}", seed_2_loc.values().min().unwrap());
+    let p2 = seed_2_loc.values().min().unwrap();
+
+    assert_eq!(*p2, 77_435_348);
+
+    println!("Part 2: {}", p2);
 
     println!("{:?}", Instant::now() - start);
 }
